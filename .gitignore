@@ -1,0 +1,25 @@
+# Build artifacts / archives
+laravel.zip
+*.zip
+*.tar.gz
+*.rar
+
+# Environment & secrets (root level)
+.env
+.env.*
+!.env.example
+
+# OS junk
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# IDE / editor
+/.vscode/
+/.idea/
+/.fleet/
+/.nova/
+/.zed/
+
+# Logs
+*.log

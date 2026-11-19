@@ -1,0 +1,32 @@
+Options -MultiViews -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Base adalah /anamackomputer — semua URL mulai dari sini
+    RewriteBase /anamackomputer/
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Handle X-XSRF-Token Header
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Jika request ke amk-spk/public/xxx, redirect ke /anamackomputer/xxx
+    # (agar user tidak bisa akses langsung via /anamackomputer/amk-spk/public/)
+    RewriteCond %{THE_REQUEST} \s/anamackomputer/amk-spk/public/(.+)\s
+    RewriteRule ^ /anamackomputer/%1 [R=301,L]
+
+    # Trailing slash redirect
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Layani file statis yang ada di public/
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Semua route → index.php
+    RewriteRule ^ index.php [L]
+</IfModule>
