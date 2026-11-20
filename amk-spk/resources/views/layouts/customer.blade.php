@@ -23,7 +23,7 @@
       @php $logoPath = \App\Models\SiteSetting::get('logo'); @endphp
       @if($logoPath)
         <img src="{{ asset('storage/' . $logoPath) }}" alt="aMK Logo"
-             style="height:110px;width:auto;object-fit:contain;">
+             style="height:100px;width:auto;object-fit:contain;">
       @else
         <div style="display:flex;align-items:center;gap:.75rem;">
           <div class="brand-icon"><i class="bi bi-laptop"></i></div>
@@ -102,7 +102,7 @@
 
 {{-- FOOTER --}}
 <footer class="footer-amk no-print mt-auto">
-  <div class="container py-4">
+  <div class="container py-3">
     <div class="row g-4 align-items-center">
       <div class="col-md-5">
         <div class="d-flex align-items-center gap-2 mb-2">
