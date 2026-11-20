@@ -1,7 +1,9 @@
 # Sistem Pakar Diagnosis Kerusakan MacBook
-**anaMac Komputer (aMK)** — Proyek Akhir Mahasiswa Informatika
+**anaMac Komputer (aMK)** — Proyek Akhir
 
 Sistem pakar berbasis web menggunakan metode **Forward Chaining** untuk mendiagnosis kerusakan MacBook berdasarkan gejala yang dipilih pengguna.
+
+🌐 **Live Demo:** [anamackomputer-production.up.railway.app](https://anamackomputer-production.up.railway.app)
 
 ---
 
@@ -10,64 +12,12 @@ Sistem pakar berbasis web menggunakan metode **Forward Chaining** untuk mendiagn
 | Komponen | Detail |
 |----------|--------|
 | Backend  | Laravel 11 (PHP 8.3) |
-| Database | MySQL via XAMPP |
+| Database | MySQL |
 | Frontend | Bootstrap 5, HTML, CSS, JavaScript |
 | Template | Blade |
 | ORM      | Eloquent |
 | Metode   | Forward Chaining |
-
----
-
-## Instalasi
-
-### Prasyarat
-- XAMPP (Apache + MySQL)
-- PHP 8.2+
-- Composer
-
-### Langkah Instalasi
-
-**1. Letakkan folder proyek**
-```
-C:\xampp\htdocs\anamackomputer\amk-spk\
-```
-
-**2. Buka XAMPP Control Panel → Start Apache & MySQL**
-
-**3. Install dependensi Laravel**
-```bash
-cd C:\xampp\htdocs\anamackomputer\amk-spk
-composer install
-```
-
-**4. Salin file environment**
-```bash
-copy .env.example .env
-php artisan key:generate
-```
-
-**5. Setup database & data awal**
-```bash
-php database/setup.php
-```
-Script ini otomatis membuat database `spk_macbook`, semua tabel, dan mengisi data awal.
-
-**6. Buka aplikasi di browser**
-```
-http://localhost/anamackomputer/amk-spk/public/
-```
-
----
-
-## Akun Default
-
-| Role  | Username | Password  |
-|-------|----------|-----------|
-| Admin | `admin`  | `admin123`|
-
-**URL Login Admin:** `http://localhost/anamackomputer/amk-spk/public/admin/login`
-
-> Ganti password setelah login pertama melalui phpMyAdmin.
+| Deploy   | Railway |
 
 ---
 
@@ -77,143 +27,195 @@ http://localhost/anamackomputer/amk-spk/public/
 - Beranda dengan informasi sistem
 - Panduan penggunaan sistem
 - Informasi kerusakan MacBook
-- Konsultasi diagnosis (pilih gejala → hasil diagnosis)
+- Konsultasi diagnosis — pilih gejala → hasil diagnosis lengkap
 - Cetak hasil diagnosis
 
 ### Admin (Login Diperlukan)
-- Dashboard dengan statistik real-time
+- Dashboard statistik real-time
 - CRUD Data Kerusakan
-- CRUD Data Gejala  
+- CRUD Data Gejala
 - CRUD Data Penyebab
 - CRUD Data Solusi
 - CRUD Aturan Diagnosis (Forward Chaining)
 - Riwayat konsultasi & detail
+- Kelola konten (judul, deskripsi, logo, banner)
 
 ---
 
 ## Cara Kerja Forward Chaining
 
 ```
-1. Customer pilih gejala → jadi FAKTA AWAL
+1. Customer pilih gejala  →  menjadi FAKTA AWAL
 2. Sistem ambil semua ATURAN dari database
-3. Untuk setiap aturan: cek apakah SEMUA kondisi gejala ada di fakta
-4. Jika ya → kerusakan ditambahkan ke HASIL DIAGNOSIS
-5. Ulangi sampai tidak ada aturan baru yang terpenuhi
+3. Tiap aturan: cek apakah SEMUA gejala kondisinya ada di fakta
+4. Jika terpenuhi → kerusakan ditambahkan ke HASIL DIAGNOSIS
+5. Ulangi sampai tidak ada aturan baru yang cocok
 6. Tampilkan hasil + penyebab + solusi
 ```
+
+---
+
+## Instalasi Lokal (XAMPP)
+
+### Prasyarat
+- XAMPP (Apache + MySQL)
+- PHP 8.2+
+- Composer
+
+### Langkah
+
+```bash
+# 1. Clone repo
+git clone https://github.com/ShinttWii/anamackomputer.git
+cd anamackomputer/amk-spk
+
+# 2. Install dependensi
+composer install
+
+# 3. Setup environment
+copy .env.example .env
+php artisan key:generate
+
+# 4. Isi .env dengan konfigurasi database lokal
+#    DB_CONNECTION=mysql
+#    DB_HOST=127.0.0.1
+#    DB_PORT=3306
+#    DB_DATABASE=spk_macbook
+#    DB_USERNAME=root
+#    DB_PASSWORD=
+
+# 5. Migrate & seed
+php artisan migrate
+php artisan db:seed
+
+# 6. Storage link
+php artisan storage:link
+
+# 7. Buka di browser
+#    http://localhost/anamackomputer/
+```
+
+### Akun Default
+
+| Role  | Username | Password  |
+|-------|----------|-----------|
+| Admin | `admin`  | `admin123` |
 
 ---
 
 ## Struktur Database
 
 ```
-admins          → akun admin
-kerusakans      → jenis kerusakan MacBook
-gejalas         → gejala kerusakan
-penyebabs       → penyebab per kerusakan
-solusis         → solusi per kerusakan
-aturans         → aturan Forward Chaining
-aturan_gejalas  → relasi aturan ↔ gejala (M:N)
-konsultasis     → riwayat konsultasi customer
-konsultasi_gejalas → gejala yang dipilih per konsultasi
-```
-
----
-
-## Reset Data
-
-Untuk menghapus semua data dan mengisi ulang:
-```bash
-php database/setup.php --reset
+admins              → akun admin
+kerusakans          → jenis kerusakan MacBook
+gejalas             → gejala kerusakan
+penyebabs           → penyebab per kerusakan
+solusis             → solusi per kerusakan
+aturans             → aturan Forward Chaining
+aturan_gejalas      → relasi aturan ↔ gejala (M:N)
+konsultasis         → riwayat konsultasi customer
+konsultasi_gejalas  → gejala yang dipilih per konsultasi
+site_settings       → konten dinamis (judul, deskripsi, logo)
+admin_password_resets → token reset password admin
 ```
 
 ---
 
 ## Deploy ke Railway
 
+### Prasyarat
+- Akun [Railway](https://railway.app)
+- Repo sudah di GitHub
+
 ### Langkah Deploy
 
-**1. Push ke GitHub** (sudah dilakukan)
+**1. Buat project baru di Railway**
+- New Project → Deploy from GitHub → pilih repo `anamackomputer`
+- Set **Root Directory** → `amk-spk`
 
-**2. Buat project baru di [Railway](https://railway.app)**
-- New Project → Deploy from GitHub repo → pilih `anamackomputer`
-- Set **Root Directory** ke `amk-spk`
+**2. Tambah MySQL**
+- Add Service → Database → MySQL
 
-**3. Tambah MySQL database**
-- Di Railway dashboard: Add Service → Database → MySQL
-- Railway otomatis inject `MYSQL_URL` ke environment
+**3. Set Environment Variables**
 
-**4. Set Environment Variables di Railway**
-```
+```env
 APP_NAME=anaMac Komputer
 APP_ENV=production
-APP_KEY=         ← generate: php artisan key:generate --show
+APP_KEY=base64:...          # php artisan key:generate --show
 APP_DEBUG=false
-APP_URL=         ← isi setelah Railway beri domain
+APP_URL=https://your-domain.up.railway.app
 
 DB_CONNECTION=mysql
-DB_HOST=         ← dari Railway MySQL service (MYSQLHOST)
-DB_PORT=         ← dari Railway MySQL service (MYSQLPORT)
-DB_DATABASE=     ← dari Railway MySQL service (MYSQLDATABASE)
-DB_USERNAME=     ← dari Railway MySQL service (MYSQLUSER)
-DB_PASSWORD=     ← dari Railway MySQL service (MYSQLPASSWORD)
+DB_HOST=                    # dari Railway MySQL → Variables → MYSQLHOST
+DB_PORT=                    # MYSQLPORT
+DB_DATABASE=                # MYSQLDATABASE
+DB_USERNAME=                # MYSQLUSER
+DB_PASSWORD=                # MYSQLPASSWORD
 
-SESSION_DRIVER=file
+SESSION_DRIVER=cookie
+SESSION_SECURE_COOKIE=true
 CACHE_STORE=file
 QUEUE_CONNECTION=sync
 LOG_CHANNEL=stderr
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your@gmail.com
+MAIL_PASSWORD=your_app_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=your@gmail.com
+MAIL_FROM_NAME=anaMac Komputer
 ```
 
-**5. Railway otomatis build & deploy** menggunakan `nixpacks.toml`
+**4. Railway otomatis build & deploy**
 
-### Perintah yang dijalankan Railway saat build
-```bash
-composer install --no-dev --optimize-autoloader
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-php artisan storage:link
+Railway menggunakan `nixpacks.toml` di folder `amk-spk/` untuk:
+- Install PHP 8.3 + ekstensi yang dibutuhkan
+- Jalankan `composer install --no-dev`
+- Jalankan `start.sh` saat startup
+
+**5. Import data ke Railway MySQL**
+
+Buka Railway → MySQL service → tab **Database** → kotak query, jalankan SQL dari file export phpMyAdmin lokal.
+
+---
+
+## Struktur Folder
+
 ```
-
-### Perintah saat start
-```bash
-php artisan migrate --force
-php -S 0.0.0.0:$PORT -t public
+anamackomputer/
+├── amk-spk/                        ← Laravel app (Root Directory Railway)
+│   ├── app/
+│   │   ├── Http/Controllers/
+│   │   │   ├── Admin/              ← CRUD admin
+│   │   │   ├── Auth/               ← Login & reset password
+│   │   │   └── Customer/           ← Halaman publik
+│   │   ├── Models/                 ← Eloquent models
+│   │   └── Services/
+│   │       └── ForwardChainingService.php
+│   ├── database/
+│   │   ├── migrations/             ← Semua migration + seed data awal
+│   │   └── seeders/
+│   ├── public/
+│   │   ├── css/                    ← style.css, admin.css
+│   │   └── js/                     ← main.js
+│   ├── resources/views/
+│   │   ├── layouts/                ← Layout customer & admin
+│   │   ├── customer/               ← Halaman publik
+│   │   ├── admin/                  ← Panel admin
+│   │   └── auth/                   ← Login & reset password
+│   ├── routes/web.php
+│   ├── nixpacks.toml               ← Konfigurasi build Railway
+│   └── start.sh                    ← Script startup Railway
+├── spk_macbook/                    ← Versi PHP native (legacy)
+├── index.php                       ← Bridge script XAMPP
+├── app.php                         ← Bridge script XAMPP
+└── .htaccess                       ← Routing XAMPP
 ```
 
 ---
 
-## Catatan Penting
+## Catatan
 
-> Hasil diagnosis sistem ini bersifat **perkiraan awal** berdasarkan gejala yang dipilih dan **tidak menggantikan** pemeriksaan langsung oleh teknisi MacBook yang berpengalaman. Data pengetahuan adalah data contoh yang perlu diverifikasi oleh teknisi anaMac Komputer.
-
----
-
-## Struktur Folder Utama
-
-```
-amk-spk/
-├── app/
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── Admin/          ← Controller admin (CRUD)
-│   │   │   ├── Auth/           ← Login/logout admin
-│   │   │   └── Customer/       ← Halaman customer
-│   │   └── Middleware/
-│   │       └── AdminAuth.php   ← Proteksi halaman admin
-│   ├── Models/                 ← Eloquent models
-│   └── Services/
-│       └── ForwardChainingService.php ← Mesin inferensi
-├── database/
-│   └── setup.php               ← Script setup database
-├── public/
-│   ├── css/                    ← style.css, admin.css
-│   └── js/                     ← main.js
-├── resources/views/
-│   ├── layouts/                ← Layout customer & admin
-│   ├── customer/               ← Halaman customer
-│   ├── admin/                  ← Halaman admin
-│   └── auth/                   ← Halaman login
-└── routes/
-    └── web.php                 ← Semua route
-```
+> Hasil diagnosis sistem ini bersifat **perkiraan awal** berdasarkan gejala yang dipilih dan **tidak menggantikan** pemeriksaan langsung oleh teknisi MacBook yang berpengalaman.
