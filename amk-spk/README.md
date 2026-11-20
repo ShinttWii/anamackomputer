@@ -129,6 +129,60 @@ php database/setup.php --reset
 
 ---
 
+## Deploy ke Railway
+
+### Langkah Deploy
+
+**1. Push ke GitHub** (sudah dilakukan)
+
+**2. Buat project baru di [Railway](https://railway.app)**
+- New Project → Deploy from GitHub repo → pilih `anamackomputer`
+- Set **Root Directory** ke `amk-spk`
+
+**3. Tambah MySQL database**
+- Di Railway dashboard: Add Service → Database → MySQL
+- Railway otomatis inject `MYSQL_URL` ke environment
+
+**4. Set Environment Variables di Railway**
+```
+APP_NAME=anaMac Komputer
+APP_ENV=production
+APP_KEY=         ← generate: php artisan key:generate --show
+APP_DEBUG=false
+APP_URL=         ← isi setelah Railway beri domain
+
+DB_CONNECTION=mysql
+DB_HOST=         ← dari Railway MySQL service (MYSQLHOST)
+DB_PORT=         ← dari Railway MySQL service (MYSQLPORT)
+DB_DATABASE=     ← dari Railway MySQL service (MYSQLDATABASE)
+DB_USERNAME=     ← dari Railway MySQL service (MYSQLUSER)
+DB_PASSWORD=     ← dari Railway MySQL service (MYSQLPASSWORD)
+
+SESSION_DRIVER=file
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
+LOG_CHANNEL=stderr
+```
+
+**5. Railway otomatis build & deploy** menggunakan `nixpacks.toml`
+
+### Perintah yang dijalankan Railway saat build
+```bash
+composer install --no-dev --optimize-autoloader
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan storage:link
+```
+
+### Perintah saat start
+```bash
+php artisan migrate --force
+php -S 0.0.0.0:$PORT -t public
+```
+
+---
+
 ## Catatan Penting
 
 > Hasil diagnosis sistem ini bersifat **perkiraan awal** berdasarkan gejala yang dipilih dan **tidak menggantikan** pemeriksaan langsung oleh teknisi MacBook yang berpengalaman. Data pengetahuan adalah data contoh yang perlu diverifikasi oleh teknisi anaMac Komputer.
