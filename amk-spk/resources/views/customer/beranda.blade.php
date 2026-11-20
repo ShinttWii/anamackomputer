@@ -221,9 +221,19 @@
   .hero-inner {
     grid-template-columns:1fr;
     padding:3rem 5vw 2.5rem;
-    gap:2.5rem;
+    gap:2rem;
   }
-  .hero-col-right { display:none; }  /* sembunyikan banner di mobile */
+  .hero-col-right {
+    display:flex;
+    order: -1; /* tampilkan banner di ATAS teks di mobile */
+  }
+  .hero-banner-wrap { max-width:100%; }
+  .hero-banner-img {
+    aspect-ratio: 16/9;
+    border-radius:12px;
+  }
+  .fallback-hero-box { aspect-ratio:16/9; }
+  .fpill { display:none; } /* sembunyikan floating pills di mobile */
   .hero-h1 { font-size:2rem; }
   .hero-desc-txt { font-size:.95rem; }
 }
