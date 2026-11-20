@@ -15,7 +15,7 @@ chmod -R 777 storage bootstrap/cache
 # Storage symlink
 php artisan storage:link --force 2>/dev/null || true
 
-# Clear cache lama
+# WAJIB: clear semua cache yang mungkin di-cache dari build lama
 php artisan config:clear 2>/dev/null || true
 php artisan route:clear  2>/dev/null || true
 php artisan view:clear   2>/dev/null || true
@@ -34,15 +34,16 @@ echo "=== Verify data ==="
 php artisan tinker --execute="
 try {
     \$a = \App\Models\Admin::first();
-    echo 'Admin: ' . (\$a ? \$a->username . ' | pw_hash_len=' . strlen(\$a->password) : 'NONE') . PHP_EOL;
+    echo 'Admin: ' . (\$a ? \$a->username . ' | pw_len=' . strlen(\$a->password) : 'NONE') . PHP_EOL;
     echo 'Kerusakan: ' . \App\Models\Kerusakan::count() . PHP_EOL;
     echo 'Gejala: '    . \App\Models\Gejala::count()    . PHP_EOL;
+    echo 'Session driver: ' . config('session.driver') . PHP_EOL;
 } catch (\Exception \$e) {
     echo 'Verify error: ' . \$e->getMessage() . PHP_EOL;
 }
 " 2>/dev/null || echo "Tinker verify skipped"
 
-# Cache production
+# Cache setelah semua siap
 php artisan config:cache 2>/dev/null || true
 php artisan route:cache  2>/dev/null || true
 
