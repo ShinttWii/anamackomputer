@@ -1,0 +1,14 @@
+[phases.setup]
+nixPkgs = ["php83", "php83Extensions.pdo", "php83Extensions.pdo_mysql", "php83Extensions.mbstring", "php83Extensions.openssl", "php83Extensions.tokenizer", "php83Extensions.xml", "php83Extensions.curl", "php83Extensions.fileinfo", "php83Extensions.zip", "php83Extensions.bcmath", "php83Extensions.gd", "php83Extensions.ctype", "php83Extensions.intl", "composer"]
+
+[phases.install]
+cmds = ["cd amk-spk && composer install --no-dev --optimize-autoloader --no-interaction"]
+
+[phases.build]
+cmds = [
+  "cd amk-spk && mkdir -p storage/app/public storage/framework/cache/data storage/framework/sessions storage/framework/views bootstrap/cache",
+  "cd amk-spk && chmod -R 777 storage bootstrap/cache"
+]
+
+[start]
+cmd = "bash start.sh"
