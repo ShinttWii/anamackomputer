@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             PenyebabSeeder::class,
             SolusiSeeder::class,
             AturanSeeder::class,
+            SiteSettingSeeder::class,
         ]);
     }
 }
