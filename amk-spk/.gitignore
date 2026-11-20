@@ -1,6 +1,7 @@
 *.log
 .DS_Store
 .env
+set-railway-vars.ps1
 .env.backup
 .env.production
 .phpactor.json
