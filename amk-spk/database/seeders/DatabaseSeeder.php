@@ -9,7 +9,9 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Nonaktifkan foreign key checks agar truncate aman
+        echo "DatabaseSeeder: Truncating tables...\n";
+
+        // Nonaktifkan foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
         DB::table('aturan_gejalas')->truncate();
@@ -21,9 +23,11 @@ class DatabaseSeeder extends Seeder
         DB::table('gejalas')->truncate();
         DB::table('kerusakans')->truncate();
         DB::table('site_settings')->truncate();
-        // admins: pakai updateOrInsert, tidak di-truncate
+        DB::table('admins')->truncate();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+        echo "DatabaseSeeder: Tables truncated, running seeders...\n";
 
         $this->call([
             AdminSeeder::class,
@@ -34,5 +38,7 @@ class DatabaseSeeder extends Seeder
             AturanSeeder::class,
             SiteSettingSeeder::class,
         ]);
+
+        echo "DatabaseSeeder: All seeders done.\n";
     }
 }

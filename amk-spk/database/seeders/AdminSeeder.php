@@ -20,5 +20,9 @@ class AdminSeeder extends Seeder
                 'updated_at'   => now(),
             ]
         );
+
+        // Verifikasi langsung setelah insert
+        $count = DB::table('admins')->count();
+        echo "AdminSeeder: {$count} admin(s) in DB\n";
     }
 }
