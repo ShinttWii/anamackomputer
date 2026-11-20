@@ -11,6 +11,8 @@ return new class extends Migration
         Schema::create('admin_password_resets', function (Blueprint $table) {
             $table->string('email')->index();
             $table->string('token');
+            $table->string('otp_code', 6)->nullable();
+            $table->timestamp('expires_at')->nullable();
             $table->timestamp('created_at')->nullable();
         });
     }
