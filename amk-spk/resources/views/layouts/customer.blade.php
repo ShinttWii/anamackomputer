@@ -23,7 +23,7 @@
       @php $logoPath = \App\Models\SiteSetting::get('logo'); @endphp
       @if($logoPath)
         <img src="{{ asset('storage/' . $logoPath) }}" alt="aMK Logo"
-             style="height:100px;width:auto;object-fit:contain;">
+             style="height:80px;width:auto;object-fit:contain;">
       @else
         <div style="display:flex;align-items:center;gap:.75rem;">
           <div class="brand-icon"><i class="bi bi-laptop"></i></div>
